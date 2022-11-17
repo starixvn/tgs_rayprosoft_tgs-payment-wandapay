@@ -44,6 +44,11 @@ internal class WandaPayClient
 
 				if (sign != depositResponse.Sign)
 					throw new WandaApiException("Deposit response sign invald.");
+
+				if (depositResponse.ErrorCode is not null)
+					throw new WandaApiException(
+						$"Deposit fail. " +
+						$"Return: {JsonSerializer.Serialize(depositResponse, WandaPayUtility.SerializerOptions)}");
 			})
 			.SingleAsync(cancellationToken);
 	}
