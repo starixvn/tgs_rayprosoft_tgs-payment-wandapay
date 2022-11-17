@@ -5,9 +5,8 @@ namespace Tgs.Payment.WandaPay;
 
 public static class WandaPayUtility
 {
-	public static readonly JsonSerializerOptions SerializerOptions = new()
+	public static readonly JsonSerializerOptions SerializerOptions = new(JsonSerializerDefaults.Web)
 	{
-		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
 		DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
 	};
 }

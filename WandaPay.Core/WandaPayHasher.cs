@@ -21,7 +21,8 @@ public class WandaPayHasher
 			"&",
 			data.AsObject()
 				.AsEnumerable()
-				.Where(prop => !string.IsNullOrEmpty(prop.Value?.ToString()))
+				.Where(prop => prop.Key is not "sign"
+					&& !string.IsNullOrEmpty(prop.Value?.ToString()))
 				.OrderBy(prop => prop.Key)
 				.Select(prop => $"{prop.Key}={prop.Value}")
 				.Concat(new[] { $"key={signKey}" }));

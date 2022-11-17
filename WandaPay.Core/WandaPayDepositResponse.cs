@@ -2,6 +2,16 @@
 
 namespace Tgs.Payment.WandaPay;
 public record WandaPayDepositResponse(
-	string ErrorCode,
+	string? ErrorCode,
 	[property: JsonPropertyName("errorMsg")]
-	string? ErrorMessage);
+	string? ErrorMessage,
+	string StoreCode,
+	string OrderNo,
+	[property: JsonPropertyName("storeOrderNo")]
+	Guid FormId,
+	string PayResult,
+	[property: JsonPropertyName("totalAmt")]
+	decimal Amount,
+	Uri PayUrl,
+	string Sign,
+	string Random);

@@ -68,4 +68,29 @@ public class SignTests
 		// Assert
 		Assert.Equal(expected, actual);
 	}
+
+	[Fact]
+	public void WandaPay_DepositResponse計算Hash()
+	{
+		// Arrange
+		var sut = new WandaPayHasher(NullLogger<WandaPayHasher>.Instance);
+		var response = new WandaPayDepositResponse(
+			null,
+			null,
+			"80059",
+			"Y2022116375B30BE4B0B09A4435AB00",
+			Guid.Parse("6820ce08-bd2d-4498-bd9c-51b8813d9bb4"),
+			"pending",
+			601.00M,
+			new Uri("https://o.xyxy1688.com/#/notNameBank?ptorder=20221117100000107254153394ba"),
+			"748681797BA05CEC88E35DE3D74DCCF7",
+			"ce055751cc9140a8ab88843596081f93");
+		var signKey = "lgL0XZoapjTeoFDmr6xvg8XFvkoHOOgPgvMBHYgCekxU0pOj2IoQvWhmHT4PM1Qb";
+
+		// Act
+		var actual = sut.ComputeHash(signKey, JsonSerializer.SerializeToNode(response, WandaPayUtility.SerializerOptions)!);
+
+		// Assert
+		Assert.Equal(response.Sign, actual);
+	}
 }
