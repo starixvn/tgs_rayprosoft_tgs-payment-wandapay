@@ -14,7 +14,11 @@ internal class WandaPayClient
 		_wandaPayHasher = wandaPayHasher ?? throw new ArgumentNullException(nameof(wandaPayHasher));
 	}
 
-	public ValueTask<WandaPayDepositResponse> DepositAsync(string storeCode, string signKey, WandaPayDepositOrder order, CancellationToken cancellationToken = default)
+	public ValueTask<WandaPayDepositResponse> DepositAsync(
+		string storeCode,
+		string signKey,
+		WandaPayDepositOrder order,
+		CancellationToken cancellationToken = default)
 	{
 		var depositOrderNode = JsonSerializer.SerializeToNode(order, WandaPayUtility.SerializerOptions)!;
 
@@ -32,6 +36,15 @@ internal class WandaPayClient
 				.ToAsyncEnumerable())
 			.Where(depositResponse => depositResponse is not null)
 			.Select(depositResponse => depositResponse!)
+			.Do(depositResponse =>
+			{
+				var sign = _wandaPayHasher.ComputeHash(
+					signKey,
+					JsonSerializer.SerializeToNode(depositResponse, WandaPayUtility.SerializerOptions)!);
+
+				if (sign != depositResponse.Sign)
+					throw new WandaApiException("Deposit response sign invald.");
+			})
 			.SingleAsync(cancellationToken);
 	}
 }
