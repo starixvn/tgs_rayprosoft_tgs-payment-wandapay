@@ -1,4 +1,5 @@
-﻿namespace Tgs.Payment.WandaPay;
+﻿using Tgs.Payment.WandaPay;
+namespace Tgs.Payment.WandaPay.Client;
 
 public static class PayType
 {

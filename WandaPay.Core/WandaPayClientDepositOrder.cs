@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace Tgs.Payment.WandaPay;
-public record WandaPayDepositOrder(
+public record WandaPayClientDepositOrder(
 	[property:JsonPropertyName("storeOrderNo")]
 	Guid FormId,
 	string PayType,
@@ -9,4 +9,4 @@ public record WandaPayDepositOrder(
 	decimal Amount,
 	Uri BackUrl,
 	Uri NotifyUrl,
-	string PlayerName);
+	string? PlayerName);

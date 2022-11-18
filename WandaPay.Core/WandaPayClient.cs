@@ -1,9 +1,10 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
+using Tgs.Payment.WandaPay.Client;
 
 namespace Tgs.Payment.WandaPay;
 
-internal class WandaPayClient
+internal class WandaPayClient : IWandaPayClient
 {
 	private readonly HttpClient _httpClient;
 	private readonly WandaPayHasher _wandaPayHasher;
@@ -14,10 +15,10 @@ internal class WandaPayClient
 		_wandaPayHasher = wandaPayHasher ?? throw new ArgumentNullException(nameof(wandaPayHasher));
 	}
 
-	public ValueTask<WandaPayDepositResponse> DepositAsync(
+	public ValueTask<WandaPayClientDepositResponse> DepositAsync(
 		string storeCode,
 		string signKey,
-		WandaPayDepositOrder order,
+		WandaPayClientDepositOrder order,
 		CancellationToken cancellationToken = default)
 	{
 		var depositOrderNode = JsonSerializer.SerializeToNode(order, WandaPayUtility.SerializerOptions)!;
@@ -37,7 +38,7 @@ internal class WandaPayClient
 			.ToAsyncEnumerable()
 			.Do(response => response.EnsureSuccessStatusCode())
 			.SelectMany(response => response.Content
-				.ReadFromJsonAsync<WandaPayDepositResponse>(WandaPayUtility.SerializerOptions, cancellationToken)
+				.ReadFromJsonAsync<WandaPayClientDepositResponse>(WandaPayUtility.SerializerOptions, cancellationToken)
 				.ToAsyncEnumerable())
 			.Where(depositResponse => depositResponse is not null)
 			.Select(depositResponse => depositResponse!)
@@ -58,7 +59,7 @@ internal class WandaPayClient
 			.SingleAsync(cancellationToken);
 	}
 
-	public ValueTask<WandaPayWithdrawResponse> WithdrawAsync(string storeCode, string signKey, WandaPayWithdrawOrder order, CancellationToken cancellationToken = default)
+	public ValueTask<WandaPayClientWithdrawResponse> WithdrawAsync(string storeCode, string signKey, WandaPayClientWithdrawOrder order, CancellationToken cancellationToken = default)
 	{
 		var withdrawOrderNode = JsonSerializer.SerializeToNode(order, WandaPayUtility.SerializerOptions)!;
 
@@ -77,7 +78,7 @@ internal class WandaPayClient
 			.ToAsyncEnumerable()
 			.Do(response => response.EnsureSuccessStatusCode())
 			.SelectMany(response => response.Content
-				.ReadFromJsonAsync<WandaPayWithdrawResponse>(WandaPayUtility.SerializerOptions, cancellationToken)
+				.ReadFromJsonAsync<WandaPayClientWithdrawResponse>(WandaPayUtility.SerializerOptions, cancellationToken)
 				.ToAsyncEnumerable())
 			.Where(withdrawResponse => withdrawResponse is not null)
 			.Select(withdrawResponse => withdrawResponse!)

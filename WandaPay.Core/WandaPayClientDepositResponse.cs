@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace Tgs.Payment.WandaPay;
-public record WandaPayWithdrawResponse(
+public record WandaPayClientDepositResponse(
 	string? ErrorCode,
 	[property: JsonPropertyName("errorMsg")]
 	string? ErrorMessage,
@@ -12,7 +12,6 @@ public record WandaPayWithdrawResponse(
 	string PayResult,
 	[property: JsonPropertyName("totalAmt")]
 	decimal Amount,
-	DateTime? PayStartTime,
-	DateTime? PayEndTime,
+	Uri PayUrl,
 	string Sign,
 	string Random);

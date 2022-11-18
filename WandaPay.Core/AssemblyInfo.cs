@@ -1,3 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("WandaPayTest")]
+[assembly: InternalsVisibleTo("WandaPay.UnitTests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

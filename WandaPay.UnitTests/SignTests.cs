@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging.Abstractions;
 using Tgs.Payment.WandaPay;
+using Tgs.Payment.WandaPay.Client;
 
 namespace WandaPay.UnitTests;
 
@@ -74,7 +75,7 @@ public class SignTests
 	{
 		// Arrange
 		var sut = new WandaPayHasher(NullLogger<WandaPayHasher>.Instance);
-		var response = new WandaPayDepositResponse(
+		var response = new WandaPayClientDepositResponse(
 			null,
 			null,
 			"80059",
