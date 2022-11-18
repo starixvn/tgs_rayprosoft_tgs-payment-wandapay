@@ -31,4 +31,14 @@ var response = await client.DepositAsync(storeCode, signKey, depositOrder);
 
 Console.WriteLine(response);
 
-//{"random":"11c7235192ec404d9f9a1bc13d48f782","storeOrderNo":"b5945c36-0163-49db-a29a-f5a868b5aba3","payResult":"pending","orderNo":"Y2022116375AF0CE4B0B09A4435AA9E","totalAmt":"601.00","sign":"6620D24611A7AB0646715215BE87155B","payUrl":"https://o.haha868.com/#/notNameBank?ptorder=202211171000001731982618b091","storeCode":"80059"}
+//var withdrawOrder = new WandaPayWithdrawOrder(
+//	Guid.NewGuid(),
+//	"測試一",
+//	"11111111",
+//	500M,
+//	new Uri("http://localhost"),
+//	"ICBC");
+
+//var withdrawResponse = await client.WithdrawAsync(storeCode, signKey, withdrawOrder);
+
+//Console.WriteLine(withdrawResponse);

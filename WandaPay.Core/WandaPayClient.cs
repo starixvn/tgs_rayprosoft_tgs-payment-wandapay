@@ -28,7 +28,12 @@ internal class WandaPayClient
 
 		depositOrderNode.AsObject()["sign"] = signValue;
 
-		return _httpClient.PostAsJsonAsync("/pay/unifiedorder", depositOrderNode, WandaPayUtility.SerializerOptions, cancellationToken)
+		return _httpClient
+			.PostAsJsonAsync(
+				"/pay/unifiedorder",
+				depositOrderNode,
+				WandaPayUtility.SerializerOptions,
+				cancellationToken)
 			.ToAsyncEnumerable()
 			.Do(response => response.EnsureSuccessStatusCode())
 			.SelectMany(response => response.Content
@@ -38,17 +43,57 @@ internal class WandaPayClient
 			.Select(depositResponse => depositResponse!)
 			.Do(depositResponse =>
 			{
+				if (depositResponse.ErrorCode is not null)
+					throw new WandaApiException(
+						$"Deposit fail. " +
+						$"Return: {JsonSerializer.Serialize(depositResponse, WandaPayUtility.SerializerOptions)}");
+
 				var sign = _wandaPayHasher.ComputeHash(
 					signKey,
 					JsonSerializer.SerializeToNode(depositResponse, WandaPayUtility.SerializerOptions)!);
 
 				if (sign != depositResponse.Sign)
 					throw new WandaApiException("Deposit response sign invald.");
+			})
+			.SingleAsync(cancellationToken);
+	}
 
-				if (depositResponse.ErrorCode is not null)
+	public ValueTask<WandaPayWithdrawResponse> WithdrawAsync(string storeCode, string signKey, WandaPayWithdrawOrder order, CancellationToken cancellationToken = default)
+	{
+		var withdrawOrderNode = JsonSerializer.SerializeToNode(order, WandaPayUtility.SerializerOptions)!;
+
+		withdrawOrderNode.AsObject().Add("storeCode", storeCode);
+
+		var signValue = _wandaPayHasher.ComputeHash(signKey, withdrawOrderNode);
+
+		withdrawOrderNode.AsObject()["sign"] = signValue;
+
+		return _httpClient
+			.PostAsJsonAsync(
+				"/withdraw/unifiedorder",
+				withdrawOrderNode,
+				WandaPayUtility.SerializerOptions,
+				cancellationToken)
+			.ToAsyncEnumerable()
+			.Do(response => response.EnsureSuccessStatusCode())
+			.SelectMany(response => response.Content
+				.ReadFromJsonAsync<WandaPayWithdrawResponse>(WandaPayUtility.SerializerOptions, cancellationToken)
+				.ToAsyncEnumerable())
+			.Where(withdrawResponse => withdrawResponse is not null)
+			.Select(withdrawResponse => withdrawResponse!)
+			.Do(withdrawResponse =>
+			{
+				if (withdrawResponse.ErrorCode is not null)
 					throw new WandaApiException(
-						$"Deposit fail. " +
-						$"Return: {JsonSerializer.Serialize(depositResponse, WandaPayUtility.SerializerOptions)}");
+						$"Withdraw fail. " +
+						$"Return: {JsonSerializer.Serialize(withdrawResponse, WandaPayUtility.SerializerOptions)}");
+
+				var sign = _wandaPayHasher.ComputeHash(
+					signKey,
+					JsonSerializer.SerializeToNode(withdrawResponse)!);
+
+				if (sign != withdrawResponse.Sign)
+					throw new WandaApiException("Withdraw response sign invald.");
 			})
 			.SingleAsync(cancellationToken);
 	}
