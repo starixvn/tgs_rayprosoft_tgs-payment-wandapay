@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -31,6 +31,6 @@ public class WandaPayHasher
 
 		var hash = MD5.HashData(Encoding.UTF8.GetBytes(stringToSign));
 
-		return new BigInteger(hash, true, true).ToString("X32");
+		return ActivityTraceId.CreateFromBytes(hash).ToHexString().ToUpper();
 	}
 }

@@ -5,6 +5,7 @@ using System.Text.Json;
 using Microsoft.Extensions.Logging.Abstractions;
 using Tgs.Payment.WandaPay;
 using Tgs.Payment.WandaPay.Client;
+using Xunit;
 
 namespace WandaPay.UnitTests;
 
@@ -93,5 +94,32 @@ public class SignTests
 
 		// Assert
 		Assert.Equal(response.Sign, actual);
+	}
+
+	[Fact]
+	public void WandaPay_Sign值應該字串長度是32碼()
+	{
+		// Arrange
+		var sut = new WandaPayHasher(NullLogger<WandaPayHasher>.Instance);
+		var data = new WandaPayClientWithdrawOrder(
+			Guid.Parse("c4f614bc-76a0-4654-9b13-ee7f9b6dbe1e"),
+			"測試一",
+			"1111111",
+			500,
+			new Uri("https://dev-payment.rpgp.cc/wandapay-test/withdraw/callback"),
+			"ICBC");
+		var signKey = "lgL0XZoapjTeoFDmr6xvg8XFvkoHOOgPgvMBHYgCekxU0pOj2IoQvWhmHT4PM1Qb";
+
+		var node = JsonSerializer.SerializeToNode(data, WandaPayUtility.SerializerOptions)!;
+
+		node["storeCode"] = "80059";
+
+		var expected = "9FB51F13890D80D6E4030AF0E6607096";
+
+		// Act
+		var actual = sut.ComputeHash(signKey, node);
+
+		// Assert
+		Assert.Equal(expected, actual);
 	}
 }
