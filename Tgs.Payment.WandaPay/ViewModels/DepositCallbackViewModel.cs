@@ -20,6 +20,6 @@ public class DepositCallbackViewModel
 	[JsonConverter(typeof(WandaDateTimeConverter))]
 	public DateTime PayStartTime { get; set; }
 
-	[JsonConverter(typeof(WandaDateTimeConverter))]
+	[JsonConverter(typeof(WandaNullableDateTimeConverter))]
 	public DateTime? PayEndTime { get; set; }
 }

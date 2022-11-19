@@ -4,7 +4,7 @@ using Tgs.Payment.WandaPay.ApplicationServices;
 
 namespace WandaPay.UnitTests;
 
-public class DepositTests
+public class PaymentTests
 {
 	[Fact]
 	public async Task 取得DepositForm資料()
