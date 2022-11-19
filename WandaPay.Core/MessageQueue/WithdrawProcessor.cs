@@ -62,12 +62,12 @@ internal class WithdrawProcessor : IMessageProcessor
 				withdrawResponse.PayEndTime));
 
 		var thirdPartyOrderNo = applyInfo.Response.OrderNo;
-		await _paymentClient
-			.SaveWithdrawFormThirdPartyOrderNoAsync(
-				settings.FormId,
-				thirdPartyOrderNo,
-				cancellationToken)
-			.ConfigureAwait(false);
+		//await _paymentClient
+		//	.SaveWithdrawFormThirdPartyOrderNoAsync(
+		//		settings.FormId,
+		//		thirdPartyOrderNo,
+		//		cancellationToken)
+		//	.ConfigureAwait(false);
 
 		var msg = new WithdrawResponse
 		{
