@@ -91,7 +91,7 @@ internal class WandaPayClient : IWandaPayClient
 
 				var sign = _wandaPayHasher.ComputeHash(
 					signKey,
-					JsonSerializer.SerializeToNode(withdrawResponse)!);
+					JsonSerializer.SerializeToNode(withdrawResponse, WandaPayUtility.SerializerOptions)!);
 
 				if (sign != withdrawResponse.Sign)
 					throw new WandaApiException("Withdraw response sign invald.");

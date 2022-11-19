@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Globalization;
+using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -94,6 +95,35 @@ public class SignTests
 
 		// Assert
 		Assert.Equal(response.Sign, actual);
+	}
+
+	[Fact]
+	public void WandaPay_WithdrawResponse計算Hash()
+	{
+		// Arrange
+		var sut = new WandaPayHasher(NullLogger<WandaPayHasher>.Instance);
+		var response = new WandaPayClientWithdrawResponse(
+			null,
+			null,
+			"80059",
+			"Y2022116378983EE4B0B09A4435C95B",
+			Guid.Parse("2d7ffd7b-9cb5-4cbf-b8fc-8ad3f84ef620"),
+			"waiting_review",
+			500.00M,
+			new DateTimeOffset(
+				DateTime.ParseExact("20221119164759", "yyyyMMddHHmmss", CultureInfo.CurrentCulture),
+				TimeSpan.FromHours(8D)).UtcDateTime,
+			null,
+			"C0492736E05B93555B7C8BC6C636C383",
+			"165d81b244374e36b9951ad465a95d75");
+		var signKey = "lgL0XZoapjTeoFDmr6xvg8XFvkoHOOgPgvMBHYgCekxU0pOj2IoQvWhmHT4PM1Qb";
+
+		// Act
+		var actual = sut.ComputeHash(signKey, JsonSerializer.SerializeToNode(response, WandaPayUtility.SerializerOptions)!);
+
+		// Assert
+		Assert.Equal(response.Sign, actual);
+
 	}
 
 	[Fact]
