@@ -1,4 +1,5 @@
-﻿using Tgs.Payment.WandaPay;
+﻿using System.Reflection;
+using Tgs.Payment.WandaPay;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,7 @@ public static class ServiceCollectionExtensions
 			.AddOptions<WandaPayOptions>()
 			.Configure(configure)
 			.Services
+			.RegisterAllServiceUtilityTypes(Assembly.GetExecutingAssembly(), ServiceLifetime.Transient)
 			.AddSingleton<WandaPayHasher>();
 	}
 }

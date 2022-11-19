@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Tgs.Payment.WandaPay.JsonConverters;
 
 namespace Tgs.Payment.WandaPay.ViewModels;
 
@@ -16,7 +17,9 @@ public class DepositCallbackViewModel
 	[JsonPropertyName("totalAmt")]
 	public decimal Amount { get; set; }
 
+	[JsonConverter(typeof(WandaDateTimeConverter))]
 	public DateTime PayStartTime { get; set; }
 
+	[JsonConverter(typeof(WandaDateTimeConverter))]
 	public DateTime? PayEndTime { get; set; }
 }

@@ -38,4 +38,8 @@
     <None Include="D:\Users\Phoenix\source\repos\tgs-payment-wandapay\WandaPay.UnitTests\.editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
 </Project>
