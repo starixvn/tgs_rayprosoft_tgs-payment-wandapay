@@ -1,5 +1,11 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Mvc;
+using Tgs.Payment.Clients;
+using Tgs.Payment.WandaPay.ApplicationServices;
+using Tgs.Payment.WandaPay.Client;
+using Tgs.Payment.WandaPay.ViewModels;
+using Tgs.ServiceUtility;
 
 namespace Tgs.Payment.WandaPay.Controllers;
 
@@ -15,11 +21,67 @@ public class WithdrawController : ControllerBase
 	}
 
 	[HttpPost("callback", Name = "NotifyWithdraw")]
-	public string WithdrawCallback(
+	public async Task<string> WithdrawCallbackAsync(
+		[FromServices] IServiceCoordinator serviceCoordinator,
+		[FromServices] WandaPayHasher wandaPayHasher,
+		[FromServices] IPaymentServiceClient paymentServiceClient,
+		[FromServices] IPaymentClient paymentClient,
 		JsonNode withdrawResult)
 	{
-		// {"random":"508396fe0d8c474aa9acaf5f2254010d","storeOrderNo":"dcb95746-ce8d-4da2-a8f4-10dfd3f748a9","payResult":"success","orderNo":"Y20221163789C2EE4B0B09A4435C9CD","totalAmt":"500.00","sign":"92ACD661E09E8185D7CB71DDEFC6D623","payStartTime":"20221119170446","payEndTime":"20221119170549","storeCode":"80059"}
-		_logger.LogInformation("{withdrawResult}", withdrawResult);
+		var viewModel = JsonSerializer.Deserialize<WithdrawCallbackViewModel>(
+			withdrawResult,
+			WandaPayUtility.SerializerOptions);
+
+		if (viewModel is null)
+		{
+			_logger.LogWarning("Parse request is null. {node}", withdrawResult);
+			return "fail";
+		}
+
+		var withdrawForm = await serviceCoordinator
+			.GetAsync<GetWithdrawFormQuery, WithdrawForm?>(new GetWithdrawFormQuery(viewModel.FormId))
+			.ConfigureAwait(false);
+
+		if (withdrawForm is null)
+		{
+			_logger.LogWarning("Can't found withdraw form({id}).", viewModel.FormId);
+			return "fail";
+		}
+
+		var sign = wandaPayHasher.ComputeHash(
+			withdrawForm.ApplyInfo!.Settings.SignKey,
+			withdrawResult);
+
+		if (sign != withdrawResult["sign"]?.GetValue<string>())
+		{
+			_logger.LogWarning("Sign value invalid. input: {input}, compute: {sign}", withdrawResult["sign"], sign);
+			return "fail";
+		}
+
+		var fsm = paymentServiceClient.CreateWithdrawStateMachine(withdrawForm.Status);
+
+		switch (viewModel.PayResult)
+		{
+			case "success":
+				if (fsm.CanFire(PaymentTrigger.PaymentWithdrawCompleted))
+				{
+					await fsm.FireAsync(PaymentTrigger.PaymentWithdrawCompleted).ConfigureAwait(false);
+
+					await paymentServiceClient.SubmitWithdrawFormStatusAsync(
+						withdrawForm.Id,
+						paymentReturn: JsonSerializer.Serialize(
+							viewModel,
+							WandaPayUtility.SerializerOptions),
+						cancellationToken: HttpContext.RequestAborted).ConfigureAwait(false);
+
+					await paymentClient.PaidWithdrawAsync(
+						withdrawForm.Id,
+						withdrawForm.BrandId,
+						HttpContext.RequestAborted).ConfigureAwait(false);
+				}
+
+				break;
+		}
 
 		return "success";
 	}

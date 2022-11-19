@@ -58,9 +58,6 @@ public class DepositController : ControllerBase
 			return "fail";
 		}
 
-		if (viewModel.PayResult != "success")
-			return "success";
-
 		var fsm = paymentServiceClient.CreateDepositStateMachine(depositForm.Status);
 
 		switch (viewModel.PayResult)
@@ -74,7 +71,8 @@ public class DepositController : ControllerBase
 						depositForm.Id,
 						paymentReturn: JsonSerializer.Serialize(
 							viewModel,
-							WandaPayUtility.SerializerOptions)).ConfigureAwait(false);
+							WandaPayUtility.SerializerOptions),
+						cancellationToken: HttpContext.RequestAborted).ConfigureAwait(false);
 
 					await paymentClient.ApproveDepositAsync(
 						depositForm.Id,

@@ -49,4 +49,45 @@ public class SerializeTests
 		// Assert
 		expected.ToExpectedObject().ShouldMatch(actual);
 	}
+
+	[Fact]
+	public void WithdrawCallback_將要求轉成WithdrawCallbackViewModel()
+	{
+		// Arrange
+		var json = """
+			{
+			    "random": "508396fe0d8c474aa9acaf5f2254010d",
+			    "storeOrderNo": "dcb95746-ce8d-4da2-a8f4-10dfd3f748a9",
+			    "payResult": "success",
+			    "orderNo": "Y20221163789C2EE4B0B09A4435C9CD",
+			    "totalAmt": "500.00",
+			    "sign": "92ACD661E09E8185D7CB71DDEFC6D623",
+			    "payStartTime": "20221119170446",
+			    "payEndTime": "20221119170549",
+			    "storeCode": "80059"
+			}
+			""";
+		var node = JsonNode.Parse(json);
+
+		var expected = new WithdrawCallbackViewModel
+		{
+			StoreCode = "80059",
+			OrderNo = "Y20221163789C2EE4B0B09A4435C9CD",
+			FormId = Guid.Parse("dcb95746-ce8d-4da2-a8f4-10dfd3f748a9"),
+			PayResult = "success",
+			Amount = 500M,
+			PayStartTime = new DateTimeOffset(
+				DateTime.ParseExact("20221119170446", "yyyyMMddHHmmss", CultureInfo.CurrentCulture),
+				TimeSpan.FromHours(8D)).UtcDateTime,
+			PayEndTime = new DateTimeOffset(
+				DateTime.ParseExact("20221119170549", "yyyyMMddHHmmss", CultureInfo.CurrentCulture),
+				TimeSpan.FromHours(8D)).UtcDateTime
+		};
+
+		// Act
+		var actual = JsonSerializer.Deserialize<DepositCallbackViewModel>(node, WandaPayUtility.SerializerOptions);
+
+		// Assert
+		expected.ToExpectedObject().ShouldMatch(actual);
+	}
 }

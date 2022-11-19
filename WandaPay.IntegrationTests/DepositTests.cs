@@ -107,11 +107,13 @@ public class DepositTests
 			.SubmitDepositFormStatusAsync(
 				Arg.Is(depositFormId),
 				Arg.Is((PaymentFlowState?)null),
-				Arg.Any<string>());
+				Arg.Any<string>(),
+				cancellationToken: Arg.Any<CancellationToken>());
 		_ = fakePaymentClient.Received(1)
 			.ApproveDepositAsync(
 				Arg.Is(depositFormId),
 				Arg.Any<Guid>(),
-				Arg.Is(500M));
+				Arg.Is(500M),
+				Arg.Any<CancellationToken>());
 	}
 }
