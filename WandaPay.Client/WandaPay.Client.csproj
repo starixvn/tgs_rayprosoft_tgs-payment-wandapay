@@ -5,6 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Tgs.Payment.WandaPay.Client</RootNamespace>
+    <Authors>Raypro</Authors>
+    <Version>0.0.1</Version>
+    <PackageId>Tgs.Payment.WandaPay.Client</PackageId>
+    <Product>Tgs.Payment.WandaPay.Client</Product>
+    <PackageProjectUrl>https://gitlab.com/rayprosoft/tgs-payment-wandapay</PackageProjectUrl>
+    <RepositoryUrl>https://gitlab.com/rayprosoft/tgs-payment-wandapay.git</RepositoryUrl>
+    <PackageTags>Tgs Payment WandaPay</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
