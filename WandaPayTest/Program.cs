@@ -25,31 +25,31 @@ logger.LogInformation("start");
 var signKey = "lgL0XZoapjTeoFDmr6xvg8XFvkoHOOgPgvMBHYgCekxU0pOj2IoQvWhmHT4PM1Qb";
 var storeCode = "80059";
 
-//var depositSettings = new WandaPayDepositSettings(
-//	storeCode,
-//	signKey,
-//	PayType.BankCard,
-//	Guid.NewGuid(),
-//	"測試一");
-
-//var depositReturn = await paymentClient.DepositAsync(
-//	"tgs.payment.wandapay.deposit",
-//	500M,
-//	JsonSerializer.Serialize(depositSettings, WandaPayUtility.SerializerOptions)).ConfigureAwait(false);
-
-//logger.LogInformation("{depositReturn}", depositReturn);
-
-var withdrawSettings = new WandaPayWithdrawSettings(
+var depositSettings = new WandaPayDepositSettings(
 	storeCode,
 	signKey,
+	PayType.BankCard,
 	Guid.NewGuid(),
-	"測試一",
-	"1111111",
-	"ICBC");
+	"測試一");
 
-var withdrawReturn = await paymentClient.WithdrawAsync(
-	"tgs.payment.wandapay.withdraw",
+var depositReturn = await paymentClient.DepositAsync(
+	"tgs.payment.wandapay.deposit",
 	500M,
-	JsonSerializer.Serialize(withdrawSettings, WandaPayUtility.SerializerOptions)).ConfigureAwait(false);
+	JsonSerializer.Serialize(depositSettings, WandaPayUtility.SerializerOptions)).ConfigureAwait(false);
 
-logger.LogInformation("{withdrawReturn}", withdrawReturn);
+logger.LogInformation("{depositReturn}", depositReturn);
+
+//var withdrawSettings = new WandaPayWithdrawSettings(
+//	storeCode,
+//	signKey,
+//	Guid.NewGuid(),
+//	"測試一",
+//	"1111111",
+//	"ICBC");
+
+//var withdrawReturn = await paymentClient.WithdrawAsync(
+//	"tgs.payment.wandapay.withdraw",
+//	500M,
+//	JsonSerializer.Serialize(withdrawSettings, WandaPayUtility.SerializerOptions)).ConfigureAwait(false);
+
+//logger.LogInformation("{withdrawReturn}", withdrawReturn);

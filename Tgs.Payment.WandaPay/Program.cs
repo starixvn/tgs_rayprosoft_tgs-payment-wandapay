@@ -4,7 +4,6 @@ using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using Tgs.Payment.Clients;
 using Tgs.Payment.WandaPay;
 using Tgs.Payment.WandaPay.MessageQueue;
 
@@ -94,8 +93,24 @@ builder.Services
 
 var app = builder.Build();
 
+app.UseHttpLogging();
 app.MapControllers();
 app.MapHealthChecks("/healthz");
 app.MapProfileViewer();
+
+app.Use(async (context, next) =>
+{
+	await next().ConfigureAwait(false);
+
+	var logger = context.RequestServices.GetService<ILoggerFactory>()
+		?.CreateLogger("Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware");
+
+	if (logger?.IsEnabled(LogLevel.Information) == true)
+	{
+		using var stream = new StreamReader(context.Request.Body);
+
+		_ = await stream.ReadToEndAsync().ConfigureAwait(false);
+	}
+});
 
 app.Run();
