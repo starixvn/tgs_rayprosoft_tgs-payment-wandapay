@@ -68,7 +68,7 @@ public class DepositTests
 				depositFormId,
 				"pending",
 				500M,
-				new Uri("http://localhost")));
+				"http://localhost"));
 
 		_ = fakeGetDepositFormService.GetAsync(Arg.Any<GetDepositFormQuery>())
 			.Returns(new DepositForm(

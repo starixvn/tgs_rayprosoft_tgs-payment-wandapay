@@ -85,7 +85,7 @@ public class SignTests
 			Guid.Parse("6820ce08-bd2d-4498-bd9c-51b8813d9bb4"),
 			"pending",
 			601.00M,
-			new Uri("https://o.xyxy1688.com/#/notNameBank?ptorder=20221117100000107254153394ba"),
+			"https://o.xyxy1688.com/#/notNameBank?ptorder=20221117100000107254153394ba",
 			"748681797BA05CEC88E35DE3D74DCCF7",
 			"ce055751cc9140a8ab88843596081f93");
 		var signKey = "lgL0XZoapjTeoFDmr6xvg8XFvkoHOOgPgvMBHYgCekxU0pOj2IoQvWhmHT4PM1Qb";

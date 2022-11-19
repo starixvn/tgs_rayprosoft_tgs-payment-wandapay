@@ -63,7 +63,7 @@ public class MessageQueueTests
 				depositSettings.FormId,
 				"pending",
 				100M,
-				new Uri("http://localhost"),
+				"http://localhost",
 				string.Empty,
 				string.Empty));
 
@@ -75,7 +75,7 @@ public class MessageQueueTests
 				depositSettings.FormId,
 				"pending",
 				100M,
-				new Uri("http://localhost")));
+				"http://localhost"));
 
 		// Act
 		var result = await sut.HandleAsync(request.ToByteArray());

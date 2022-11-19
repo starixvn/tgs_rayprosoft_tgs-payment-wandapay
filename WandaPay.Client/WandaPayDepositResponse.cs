@@ -5,4 +5,4 @@ public record WandaPayDepositResponse(
 	Guid FormId,
 	string PayResult,
 	decimal Amount,
-	Uri PayUrl);
+	string PayUrl);

@@ -12,6 +12,6 @@ public record WandaPayClientDepositResponse(
 	string PayResult,
 	[property: JsonPropertyName("totalAmt")]
 	decimal Amount,
-	Uri PayUrl,
+	string PayUrl,
 	string Sign,
 	string Random);
