@@ -11,6 +11,7 @@ internal static class WandaPayTestHost
 		.WithWebHostBuilder(hostBuilder => hostBuilder
 			.ConfigureAppConfiguration((_, configBuilder) => configBuilder.Sources.Clear())
 			.ConfigureServices(services => services
+				.AddFakeNatsMessageQueue()
 				.AddSingleton<IConfigureOptions<OtlpExporterOptions>>(
 					sp => new ConfigureNamedOptions<OtlpExporterOptions>(
 						Options.DefaultName,
