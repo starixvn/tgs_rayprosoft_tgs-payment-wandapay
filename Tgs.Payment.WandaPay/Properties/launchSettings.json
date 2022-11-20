@@ -1,25 +1,30 @@
-﻿{
-	"profiles": {
-		"http": {
-			"commandName": "Project",
-			"dotnetRunMessages": true,
-			"launchBrowser": true,
-			"applicationUrl": "http://localhost:5263",
-			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development",
-				"OTEL_SERVICE_NAME": "Payment-WandaPay(local)",
-				"NODE_IP": "otel.rpgp.cc"
-			}
-		},
-		"https": {
-			"commandName": "Project",
-			"dotnetRunMessages": true,
-			"applicationUrl": "https://localhost:7046;http://+:5263",
-			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development",
-				"OTEL_SERVICE_NAME": "Payment-WandaPay(local)",
-				"NODE_IP": "otel.rpgp.cc"
-			}
-		}
-	}
+{
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "OTEL_SERVICE_NAME": "Payment-WandaPay(local)",
+        "NODE_IP": "otel.rpgp.cc"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5263"
+    },
+    "https": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "OTEL_SERVICE_NAME": "Payment-WandaPay(local)",
+        "NODE_IP": "otel.rpgp.cc"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7046;http://+:5263"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "publishAllPorts": true
+    }
+  }
 }
