@@ -48,7 +48,8 @@ builder.Services
 		.AddLoggingHandler<WandaPayOptions>())
 	.AddMessageQueue()
 	.AddNatsMessageQueue(natsConfig => natsConfig
-		.ConfigQueueOptions((options, _) => options.Url = builder.Configuration.GetConnectionString("Nats")!)
+		.ConfigQueueOptions((options, _) => options.Url = 
+			builder.Configuration.GetConnectionString("Nats")!)
 		.AddProcessor(
 			ProcessorTypes.DepositProcessorType,
 			"tgs.payment.wandapay.deposit",
