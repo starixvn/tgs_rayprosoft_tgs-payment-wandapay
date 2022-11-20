@@ -9,6 +9,11 @@ data:
     {
       "WandaPay": {
         "PaymentServiceBaseUrl": "http://payment-api"
+      },
+      "Logging": {
+        "LogLevel": {
+          "Microsoft.AspNetCore.HttpLogging": "Information"
+        }
       }
     }
   otel-collector-config.yaml: |
