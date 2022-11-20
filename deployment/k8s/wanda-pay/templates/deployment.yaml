@@ -37,7 +37,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: OTEL_SERVICE_NAME
-              value: PlayerBucket-Worker({{ .Release.Namespace }})
+              value: Payment-WandaPay({{ .Release.Namespace }})
             - name: NODE_IP
               valueFrom:
                 fieldRef:
@@ -51,12 +51,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: tgs-connections
-                  key: payment-malakipay-paymentApiUrl
+                  key: payment-wandapay-paymentApiUrl
             - name: WandaPay__CallbackBaseUrl
               valueFrom:
                 secretKeyRef:
                   name: tgs-connections
-                  key: payment-malakipay-callback
+                  key: payment-wandapay-callback
           ports:
             - name: http
               containerPort: 80
