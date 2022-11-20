@@ -9,6 +9,9 @@ using Tgs.Payment.WandaPay.MessageQueue;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration
+	.AddJsonFile("/config/appsettings.json", true);
+
 builder.Logging
 	.AddOpenTelemetry(options =>
 	{
@@ -48,7 +51,7 @@ builder.Services
 		.AddLoggingHandler<WandaPayOptions>())
 	.AddMessageQueue()
 	.AddNatsMessageQueue(natsConfig => natsConfig
-		.ConfigQueueOptions((options, _) => options.Url = 
+		.ConfigQueueOptions((options, _) => options.Url =
 			builder.Configuration.GetConnectionString("Nats")!)
 		.AddProcessor(
 			ProcessorTypes.DepositProcessorType,
