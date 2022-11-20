@@ -12,7 +12,8 @@ data:
       },
       "Logging": {
         "LogLevel": {
-          "Microsoft.AspNetCore.HttpLogging": "Information"
+          "Microsoft.AspNetCore.HttpLogging": "Information",
+          "Tgs.Payment.WandaPay.WandaPayOptions": "Information"
         }
       }
     }

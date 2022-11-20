@@ -27,7 +27,7 @@ public class WandaPayHasher
 				.Select(prop => $"{prop.Key}={prop.Value}")
 				.Concat(new[] { $"key={signKey}" }));
 
-		_logger.LogTrace("StringToSign={stringToSign}", stringToSign);
+		_logger.LogDebug("StringToSign={stringToSign}", stringToSign);
 
 		var hash = MD5.HashData(Encoding.UTF8.GetBytes(stringToSign));
 
