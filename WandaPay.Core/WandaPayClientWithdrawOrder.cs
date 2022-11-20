@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Tgs.Payment.WandaPay.JsonConverters;
 
 namespace Tgs.Payment.WandaPay;
 public record WandaPayClientWithdrawOrder(
@@ -7,6 +8,7 @@ public record WandaPayClientWithdrawOrder(
 	string AccountName,
 	string AccountNo,
 	[property: JsonPropertyName("transAmt")]
+	[property: JsonConverter(typeof(WandaDecimalConverter))]
 	decimal TransferAmount,
 	Uri NotifyUrl,
 	string BankCode,

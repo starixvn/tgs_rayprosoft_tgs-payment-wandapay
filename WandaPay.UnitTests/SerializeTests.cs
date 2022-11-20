@@ -46,4 +46,23 @@ public class SerializeTests
 		// Assert
 		Assert.Equal(expected, actual);
 	}
+
+	[Fact]
+	public void WandPayClientWithdrawOrder_序列化成JsonNode時Amount去除小數點後的零()
+	{
+		// Arrange
+		var sut = new WandaPayClientWithdrawOrder(
+			Guid.NewGuid(),
+			"測試者",
+			"11111111",
+			decimal.Parse("500.000000"),
+			new Uri("http://localhost"),
+			"ICBC");
+
+		// Act
+		var actual = JsonSerializer.SerializeToNode(sut, WandaPayUtility.SerializerOptions);
+
+		// Assert
+		Assert.Equal("500", actual?["transAmt"]?.ToString());
+	}
 }
