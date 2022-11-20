@@ -48,7 +48,7 @@ Selector labels
 {{- define "wanda-pay.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "wanda-pay.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-tgs.kind=payment
+tgs.kind: payment
 {{- end }}
 
 {{/*
