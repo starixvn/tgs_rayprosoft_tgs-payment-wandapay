@@ -100,7 +100,6 @@ push-k8s-template:
         .image.repository = strenv(ImageName) |
         .image.tag = strenv(Tag)
       ' artifacts/k8s/$HelmTemplateFolderName/values.yaml
-    - cp -R deployment/k8s/$HelmTemplateFolderName artifacts/k8s/
   artifacts:
     name: HelmTemplate
     untracked: false
